@@ -36,6 +36,9 @@ export function messageErreur(erreur: any, parDefaut: string): string {
     if (typeof premier === 'string') return premier;
   }
   if (typeof corps?.message === 'string' && corps.message) return corps.message;
-  if (erreur?.status === 0) return 'Le serveur ne répond pas. Le backend est-il lancé ?';
+  // 0 = aucune réponse, 5xx sans message = le proxy n'a pas pu joindre le backend
+  if (erreur?.status === 0 || erreur?.status >= 500) {
+    return 'Le serveur ne répond pas. Le backend Sillage est-il lancé (port 8082) ?';
+  }
   return parDefaut;
 }
