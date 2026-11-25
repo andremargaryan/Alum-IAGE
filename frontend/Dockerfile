@@ -9,5 +9,7 @@ RUN npm run build -- --configuration production
 # Étape 2 : Serveur de production NGINX
 FROM nginx:alpine
 COPY --from=build /app/dist/frontend/browser /usr/share/nginx/html
+# Relais vers l'API et routes Angular (voir nginx.conf)
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
