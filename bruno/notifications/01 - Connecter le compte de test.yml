@@ -1,5 +1,5 @@
 info:
-  name: 01 - Connecter l’étudiant Hugo
+  name: 01 - Connecter le compte de test
   type: http
   seq: 1
 
@@ -16,8 +16,8 @@ http:
     type: json
     data: |-
       {
-        "email": "hugo@alumni.test",
-        "motDePasse": "password"
+        "email": "{{notificationsEmail}}",
+        "motDePasse": "NotificationsEssai!"
       }
 
 runtime:
@@ -30,7 +30,7 @@ runtime:
 
         test("Le jeton est rangé dans la variable", function () {
             expect(res.getBody().token).to.be.a("string");
-            bru.setVar("jetonHugo", res.getBody().token);
+            bru.setVar("jetonNotifications", res.getBody().token);
         });
 
 settings:

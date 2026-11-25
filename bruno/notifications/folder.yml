@@ -7,8 +7,6 @@ request:
   auth: inherit
 
 docs: |-
-  Lance le dossier dans l’ordre avec le backend Docker démarré sur localhost:8080.
-  Utilise Hugo (userId = 3, ETUDIANT, mot de passe "password") des données de départ.
-  Dans les données de départ :
-  - Hugo (3) a 3 notifications : 1 (lue), 2 (non lue), 4 (lue).
-  - Sarah (4) a 1 notification : 1 (non lue).
+  Lance le dossier dans l’ordre avec le backend Docker sur localhost:8080.
+  Chaque exécution crée un compte de test unique, attend sa notification de
+  bienvenue JMS, vérifie sa lecture, puis supprime le compte via l’API.

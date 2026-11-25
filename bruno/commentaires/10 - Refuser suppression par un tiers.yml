@@ -1,0 +1,19 @@
+info:
+  name: 10 - Refuser suppression par un tiers
+  type: http
+  seq: 10
+http:
+  method: DELETE
+  url: "{{baseUrl}}/api/posts/comments/{{commentForum}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonLea}}"
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(403);
+        });

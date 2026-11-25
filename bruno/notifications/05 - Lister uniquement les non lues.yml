@@ -5,12 +5,12 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/users/3/notifications?unreadOnly=true"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications?unreadOnly=true"
   headers:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:
@@ -28,7 +28,7 @@ runtime:
                 expect(notif.isRead).to.equal(false);
             }
             const ids = liste.map(n => n.notifId);
-            expect(ids).to.include(2);
+            expect(ids).to.include(Number(bru.getVar("notificationBienvenueId")));
         });
 
 settings:

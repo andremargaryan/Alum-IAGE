@@ -1,0 +1,20 @@
+info:
+  name: 12 - Vérifier la suppression
+  type: http
+  seq: 12
+http:
+  method: GET
+  url: "{{baseUrl}}/api/posts/3/comments"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(200);
+          expect(res.getBody().some(c => c.id === bru.getVar("commentForum"))).to.equal(false);
+        });

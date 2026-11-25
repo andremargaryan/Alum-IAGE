@@ -5,12 +5,12 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/users/3/notifications/unread-count"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications/unread-count"
   headers:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:
@@ -21,8 +21,8 @@ runtime:
             expect(res.getStatus()).to.equal(200);
         });
 
-        test("Au moins 1 notification non lue", function () {
-            expect(Number(res.getBody())).to.be.at.least(1);
+        test("Une notification non lue", function () {
+            expect(Number(res.getBody())).to.equal(1);
         });
 
 settings:

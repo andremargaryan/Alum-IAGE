@@ -10,7 +10,7 @@ http:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:

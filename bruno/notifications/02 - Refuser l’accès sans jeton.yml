@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/users/3/notifications"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications"
   headers:
     - name: Accept
       value: application/json

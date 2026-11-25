@@ -5,12 +5,12 @@ info:
 
 http:
   method: GET
-  url: "{{baseUrl}}/users/3/notifications/unread-count"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications/unread-count"
   headers:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:

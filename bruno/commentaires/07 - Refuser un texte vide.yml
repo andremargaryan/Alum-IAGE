@@ -1,0 +1,23 @@
+info:
+  name: 07 - Refuser un texte vide
+  type: http
+  seq: 7
+http:
+  method: POST
+  url: "{{baseUrl}}/api/posts/3/comments"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+  body:
+    type: json
+    data: |-
+      {"texte": "  "}
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(400);
+        });

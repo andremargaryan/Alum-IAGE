@@ -5,12 +5,12 @@ info:
 
 http:
   method: PATCH
-  url: "{{baseUrl}}/users/3/notifications/read-all"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications/read-all"
   headers:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:

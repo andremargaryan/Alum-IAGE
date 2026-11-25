@@ -1,16 +1,16 @@
 info:
-  name: 08 - Marquer la notification 2 comme lue
+  name: 08 - Marquer la notification de bienvenue comme lue
   type: http
   seq: 8
 
 http:
   method: PATCH
-  url: "{{baseUrl}}/users/3/notifications/2/read"
+  url: "{{baseUrl}}/users/{{notificationsUserId}}/notifications/{{notificationBienvenueId}}/read"
   headers:
     - name: Accept
       value: application/json
     - name: Authorization
-      value: "Bearer {{jetonHugo}}"
+      value: "Bearer {{jetonNotifications}}"
   auth: inherit
 
 runtime:

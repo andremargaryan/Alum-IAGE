@@ -1,0 +1,24 @@
+info:
+  name: 05 - Publier sur le post 3
+  type: http
+  seq: 5
+http:
+  method: POST
+  url: "{{baseUrl}}/api/posts/3/comments"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+  body:
+    type: json
+    data: |-
+      {"texte": "Test ALUMNI-13"}
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(201);
+          const c = res.getBody(); expect(c.postId).to.equal(3); expect(c.auteurId).to.equal(3); expect(c.auteurNom).to.be.a("string"); expect(c.auteurPrenom).to.be.a("string"); expect(c.texte).to.equal("Test ALUMNI-13"); expect(c.createdAt).to.be.a("string"); bru.setVar("commentForum", c.id);
+        });
