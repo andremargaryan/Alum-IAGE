@@ -1,6 +1,5 @@
-@if (!chargementTermine) {
+@if (!chargementTermine()) {
   <app-chargement (termine)="finDuChargement()" />
 } @else {
-  <app-en-tete />
   <router-outlet />
 }

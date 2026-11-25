@@ -1,0 +1,24 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Experience, Formation, Utilisateur } from '../modeles/utilisateur';
+
+@Injectable({ providedIn: 'root' })
+export class UtilisateurService {
+  private http = inject(HttpClient);
+
+  // GET /users : l'annuaire des comptes actifs
+  lister(): Observable<Utilisateur[]> {
+    return this.http.get<Utilisateur[]>('/users');
+  }
+
+  // GET /api/users/{id}/experiences
+  experiences(userId: number): Observable<Experience[]> {
+    return this.http.get<Experience[]>(`/api/users/${userId}/experiences`);
+  }
+
+  // GET /api/users/{id}/formations
+  formations(userId: number): Observable<Formation[]> {
+    return this.http.get<Formation[]>(`/api/users/${userId}/formations`);
+  }
+}

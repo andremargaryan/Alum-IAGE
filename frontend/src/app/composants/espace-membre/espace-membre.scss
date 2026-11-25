@@ -1,0 +1,142 @@
+.espace {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100vh;
+}
+
+// --- Barre latérale ---------------------------------------------------------
+.barre-laterale {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 30px 18px;
+  border-right: 1px solid var(--bordure);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.marque {
+  padding: 0 12px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--encre);
+  text-decoration: none;
+}
+
+.navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: var(--texte-doux);
+  font-size: 0.92rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background: rgba(20, 20, 26, 0.04);
+    color: var(--encre);
+  }
+
+  &.actif {
+    background: var(--encre);
+    color: var(--fond);
+  }
+}
+
+.icone svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pied {
+  margin: auto 0 0;
+  padding: 0 12px;
+  font-size: 0.8rem;
+  color: var(--texte-doux);
+}
+
+// --- Barre du haut ----------------------------------------------------------
+.zone-principale {
+  min-width: 0;
+}
+
+.barre-haut {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px clamp(20px, 3vw, 40px);
+  background: rgba(246, 245, 242, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--bordure);
+}
+
+.titre {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.contenu {
+  padding: 28px clamp(20px, 3vw, 40px) 48px;
+}
+
+// --- Petits écrans : la barre latérale passe en haut ------------------------
+@media (max-width: 860px) {
+  .espace {
+    grid-template-columns: 1fr;
+  }
+
+  .barre-laterale {
+    position: static;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--bordure);
+  }
+
+  .navigation {
+    flex-direction: row;
+  }
+
+  .lien {
+    white-space: nowrap;
+  }
+
+  .pied {
+    display: none;
+  }
+}
