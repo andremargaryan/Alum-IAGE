@@ -1,11 +1,25 @@
 // --- Couleurs et polices communes à toute l'application ---------------------
 :root {
   --fond: #f6f5f2;
+  --carte: #ffffff;
   --encre: #14141a;
   --texte-doux: #5c5c66;
   --bordure: rgba(20, 20, 26, 0.08);
   --rayon: 999px;
   --police: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  // Teintes douces reprises des taches floues de l'accueil (badges, avatars, bandeaux)
+  --bleu: #3f4fd8;
+  --bleu-fond: #e6eaff;
+  --vert: #0f8a6a;
+  --vert-fond: #dcf4ec;
+  --violet: #7a3fd0;
+  --violet-fond: #efe5ff;
+  --ambre: #b86a00;
+  --ambre-fond: #fdf0d8;
+  --rose: #c43c6f;
+  --rose-fond: #fde4ee;
+  --rouge: #d93a3a;
 }
 
 *,
@@ -27,25 +41,40 @@ a {
   color: inherit;
 }
 
-// --- Boutons réutilisés sur toutes les pages --------------------------------
+h1,
+h2,
+h3 {
+  letter-spacing: -0.01em;
+}
+
+// --- Boutons -----------------------------------------------------------------
 .bouton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   padding: 10px 20px;
   border-radius: var(--rayon);
   border: 1px solid transparent;
+  font: inherit;
   font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
   transition:
     background 0.2s ease,
     color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    opacity 0.2s ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: default;
   }
 }
 
@@ -53,7 +82,7 @@ a {
   background: var(--encre);
   color: var(--fond);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: #2b2b36;
   }
 }
@@ -62,9 +91,23 @@ a {
   background: transparent;
   color: var(--encre);
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: rgba(20, 20, 26, 0.06);
   }
+}
+
+.bouton-doux {
+  background: rgba(20, 20, 26, 0.05);
+  color: var(--encre);
+
+  &:hover:not(:disabled) {
+    background: rgba(20, 20, 26, 0.09);
+  }
+}
+
+.bouton-ambre {
+  background: var(--ambre-fond);
+  color: var(--ambre);
 }
 
 .bouton-grand {
@@ -72,24 +115,470 @@ a {
   font-size: 1rem;
 }
 
-// --- Mise en page simple pour les pages provisoires -------------------------
-.page-simple {
-  min-height: 100vh;
+.bouton-large {
+  width: 100%;
+  padding: 13px 20px;
+}
+
+.lien-texte {
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--encre);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.lien-danger {
+  color: var(--rouge);
+}
+
+.retour {
+  margin: -6px 0 16px -12px;
+}
+
+// Bouton "j'aime" du forum
+.bouton-like {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border: 1px solid var(--bordure);
+  border-radius: var(--rayon);
+  background: var(--carte);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--texte-doux);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+
+  &.aime {
+    background: var(--rose-fond);
+    border-color: transparent;
+    color: var(--rose);
+
+    svg {
+      fill: currentColor;
+    }
+  }
+}
+
+// --- Cartes et blocs -----------------------------------------------------------
+.carte {
+  padding: 22px 24px;
+  border: 1px solid var(--bordure);
+  border-radius: 20px;
+  background: var(--carte);
+  box-shadow: 0 1px 2px rgba(20, 20, 26, 0.03);
+}
+
+.bloc-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+}
+
+.grille-cartes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.barre-outils {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding: 12px 14px;
+}
+
+.recherche {
+  flex: 1;
+  min-width: 200px;
+}
+
+.etat-vide {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}
+
+.etat-vide-carte {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 120px 24px 64px;
+  gap: 14px;
+  padding: 48px 24px;
   text-align: center;
-
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-  }
+  color: var(--texte-doux);
 
   p {
     margin: 0;
-    color: var(--texte-doux);
+  }
+}
+
+// --- Puces de filtre -----------------------------------------------------------
+.puces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.puce {
+  padding: 8px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--rayon);
+  background: rgba(20, 20, 26, 0.05);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--texte-doux);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    color: var(--encre);
+  }
+
+  &.active {
+    background: var(--encre);
+    color: var(--fond);
+  }
+}
+
+// --- Badges --------------------------------------------------------------------
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--rayon);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.teinte-bleu {
+  background: var(--bleu-fond);
+  color: var(--bleu);
+}
+.teinte-vert {
+  background: var(--vert-fond);
+  color: var(--vert);
+}
+.teinte-violet {
+  background: var(--violet-fond);
+  color: var(--violet);
+}
+.teinte-ambre {
+  background: var(--ambre-fond);
+  color: var(--ambre);
+}
+.teinte-gris {
+  background: rgba(20, 20, 26, 0.06);
+  color: var(--texte-doux);
+}
+.teinte-encre {
+  background: var(--encre);
+  color: var(--fond);
+}
+
+// Statut d'inscription affiché sur les cartes d'événement
+.etat {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
+  border-radius: var(--rayon);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.etat-vert {
+  background: var(--vert-fond);
+  color: var(--vert);
+}
+.etat-ambre {
+  background: var(--ambre-fond);
+  color: var(--ambre);
+}
+
+// Jauge de remplissage des événements
+.barre-progression {
+  height: 6px;
+  border-radius: var(--rayon);
+  background: rgba(20, 20, 26, 0.07);
+  overflow: hidden;
+}
+
+.remplissage {
+  display: block;
+  height: 100%;
+  border-radius: var(--rayon);
+  background: var(--encre);
+  transition: width 0.6s ease;
+}
+.remplissage-bleu {
+  background: var(--bleu);
+}
+.remplissage-vert {
+  background: var(--vert);
+}
+.remplissage-violet {
+  background: var(--violet);
+}
+.remplissage-ambre {
+  background: var(--ambre);
+}
+.remplissage-rouge {
+  background: var(--rouge);
+}
+
+// --- Champs de formulaire ------------------------------------------------------
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+
+  > span {
+    font-size: 0.85rem;
+    font-weight: 600;
+
+    em {
+      font-style: normal;
+      font-weight: 400;
+      color: var(--texte-doux);
+    }
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--bordure);
+    border-radius: 12px;
+    background: var(--fond);
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--encre);
+    transition:
+      border-color 0.2s ease,
+      background 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--encre);
+      background: var(--carte);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: var(--rouge);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.champ-recherche,
+.champ-select {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid transparent;
+  border-radius: var(--rayon);
+  background: rgba(20, 20, 26, 0.05);
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--encre);
+
+  &:focus {
+    outline: none;
+    border-color: var(--encre);
+    background: var(--carte);
+  }
+}
+
+.champ-recherche {
+  flex: 1;
+  min-width: 200px;
+}
+
+.champ-select {
+  width: auto;
+}
+
+.ligne-champs {
+  display: flex;
+  gap: 14px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.erreur-champ {
+  font-size: 0.8rem;
+  color: var(--rouge);
+}
+
+.message-erreur {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: #fde8e8;
+  font-size: 0.88rem;
+  color: #a12a2a;
+}
+
+.formulaire-page {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 760px;
+  padding: 28px 32px;
+
+  h2 {
+    margin: 0;
+  }
+
+  .message-erreur {
+    margin: 0;
+  }
+}
+
+.actions-formulaire {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+// --- Pages connexion / inscription --------------------------------------------
+.page-auth {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 120px 20px 60px;
+}
+
+.carte-auth {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(460px, 100%);
+  padding: 34px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px);
+
+  h1 {
+    margin: 0;
+    font-size: 1.6rem;
+  }
+
+  .message-erreur {
+    margin: 0;
+  }
+}
+
+.sous-titre {
+  margin: -8px 0 6px;
+  color: var(--texte-doux);
+}
+
+.bas-carte {
+  margin: 0;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--texte-doux);
+
+  a {
+    color: var(--encre);
+    font-weight: 600;
+  }
+}
+
+// --- Fond flou partagé (accueil, connexion, inscription) ----------------------
+.fond {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  filter: blur(90px);
+  pointer-events: none;
+}
+
+.tache {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+  animation: flotte 18s ease-in-out infinite alternate;
+}
+
+.tache-1 {
+  width: 520px;
+  height: 520px;
+  top: -10%;
+  left: 8%;
+  background: #b9c6ff;
+}
+
+.tache-2 {
+  width: 460px;
+  height: 460px;
+  bottom: -12%;
+  right: 6%;
+  background: #d8c4ff;
+  animation-duration: 22s;
+}
+
+.tache-3 {
+  width: 360px;
+  height: 360px;
+  top: 40%;
+  left: 45%;
+  background: #c4ecf0;
+  animation-duration: 26s;
+}
+
+@keyframes flotte {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(60px, -40px) scale(1.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tache {
+    animation: none;
   }
 }
