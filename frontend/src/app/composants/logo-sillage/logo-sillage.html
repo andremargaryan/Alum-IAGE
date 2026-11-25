@@ -1,0 +1,17 @@
+<svg class="logo" viewBox="-10 -10 510 120" role="img" aria-label="Sillage">
+  @for (lettre of lettres; track $index; let i = $index) {
+    <g [attr.transform]="'translate(' + lettre.x + ' 0)'">
+      @for (barre of lettre.barres; track $index; let j = $index) {
+        <line
+          [attr.x1]="barre.x1"
+          [attr.y1]="barre.y1"
+          [attr.x2]="barre.x2"
+          [attr.y2]="barre.y2"
+          [class.anime]="anime"
+          [class]="'depuis-' + barre.depuis"
+          [style.animation-delay.s]="delai(i, j)"
+        />
+      }
+    </g>
+  }
+</svg>
