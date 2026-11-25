@@ -26,7 +26,7 @@ export class TableauDeBord implements OnInit {
   villes = signal<VilleMembres[]>([]);
   nombreMembres = signal(0);
   evenements = signal<Evenement[]>([]);
-  inscriptions = signal<Record<number, MonInscription>>({});
+  inscriptions = signal<Record<number, MonInscription | null>>({});
   evenementEnCours = signal<number | null>(null);
   sujets = signal<Sujet[]>([]);
   nombreCommentaires = signal<Record<number, number>>({});
@@ -58,11 +58,13 @@ export class TableauDeBord implements OnInit {
   chargerEvenements(): void {
     this.evenementService.lister().subscribe((liste) => {
       const prochains = liste.slice(0, 3);
+      this.inscriptions.set({});
       this.evenements.set(prochains);
       this.chargement.set(false);
       for (const evenement of prochains) {
-        this.evenementService.monInscription(evenement.id).subscribe((inscription) => {
-          this.inscriptions.set({ ...this.inscriptions(), [evenement.id]: inscription });
+        this.evenementService.monInscription(evenement.id).subscribe({
+          next: (inscription) => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: inscription })),
+          error: () => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: null })),
         });
       }
     });

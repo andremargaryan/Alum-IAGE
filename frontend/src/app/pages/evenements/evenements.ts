@@ -21,7 +21,7 @@ export class Evenements implements OnInit {
   categories = CATEGORIES_EVENEMENT;
 
   evenements = signal<Evenement[]>([]);
-  inscriptions = signal<Record<number, MonInscription>>({});
+  inscriptions = signal<Record<number, MonInscription | null>>({});
   categorieChoisie = signal<number | null>(null); // null = toutes
   recherche = '';
   chargement = signal(true);
@@ -46,6 +46,7 @@ export class Evenements implements OnInit {
     this.erreur.set('');
     this.evenementService.lister(this.recherche).subscribe({
       next: (liste) => {
+        this.inscriptions.set({});
         this.evenements.set(liste);
         this.chargement.set(false);
         this.chargerInscriptions(liste);
@@ -84,8 +85,9 @@ export class Evenements implements OnInit {
   // GET /api/events/{id}/inscriptions/me pour chaque événement affiché
   private chargerInscriptions(liste: Evenement[]): void {
     for (const evenement of liste) {
-      this.evenementService.monInscription(evenement.id).subscribe((inscription) => {
-        this.inscriptions.set({ ...this.inscriptions(), [evenement.id]: inscription });
+      this.evenementService.monInscription(evenement.id).subscribe({
+        next: (inscription) => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: inscription })),
+        error: () => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: null })),
       });
     }
   }
