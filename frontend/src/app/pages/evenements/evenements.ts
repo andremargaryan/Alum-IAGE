@@ -1,0 +1,103 @@
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { CarteEvenement } from '../../composants/carte-evenement/carte-evenement';
+import { CATEGORIES_EVENEMENT } from '../../modeles/categories';
+import { Evenement, MonInscription } from '../../modeles/evenement';
+import { messageErreur } from '../../outils/format';
+import { EvenementService } from '../../services/evenement.service';
+import { SessionService } from '../../services/session.service';
+
+@Component({
+  selector: 'app-evenements',
+  imports: [FormsModule, RouterLink, CarteEvenement],
+  templateUrl: './evenements.html',
+  styleUrl: './evenements.scss',
+})
+export class Evenements implements OnInit {
+  private evenementService = inject(EvenementService);
+  session = inject(SessionService);
+
+  categories = CATEGORIES_EVENEMENT;
+
+  evenements = signal<Evenement[]>([]);
+  inscriptions = signal<Record<number, MonInscription>>({});
+  categorieChoisie = signal<number | null>(null); // null = toutes
+  recherche = '';
+  chargement = signal(true);
+  erreur = signal('');
+  evenementEnCours = signal<number | null>(null);
+
+  // Le filtre par catégorie se fait dans le navigateur : l'API filtre par mot-clé et lieu.
+  evenementsAffiches = computed(() => {
+    const categorie = this.categorieChoisie();
+    return categorie === null
+      ? this.evenements()
+      : this.evenements().filter((evenement) => evenement.categorieId === categorie);
+  });
+
+  ngOnInit(): void {
+    this.charger();
+  }
+
+  // GET /api/events?motCle=...
+  charger(): void {
+    this.chargement.set(true);
+    this.erreur.set('');
+    this.evenementService.lister(this.recherche).subscribe({
+      next: (liste) => {
+        this.evenements.set(liste);
+        this.chargement.set(false);
+        this.chargerInscriptions(liste);
+      },
+      error: (erreur) => {
+        this.erreur.set(messageErreur(erreur, 'Impossible de charger les événements.'));
+        this.chargement.set(false);
+      },
+    });
+  }
+
+  choisirCategorie(categorieId: number | null): void {
+    this.categorieChoisie.set(categorieId);
+  }
+
+  estMonEvenement(evenement: Evenement): boolean {
+    return evenement.auteurId === this.session.utilisateur()?.userId;
+  }
+
+  inscrire(evenementId: number): void {
+    this.evenementEnCours.set(evenementId);
+    this.evenementService.inscrire(evenementId).subscribe({
+      next: () => this.apresChangement(),
+      error: (erreur) => this.echec(erreur),
+    });
+  }
+
+  desinscrire(evenementId: number): void {
+    this.evenementEnCours.set(evenementId);
+    this.evenementService.desinscrire(evenementId).subscribe({
+      next: () => this.apresChangement(),
+      error: (erreur) => this.echec(erreur),
+    });
+  }
+
+  // GET /api/events/{id}/inscriptions/me pour chaque événement affiché
+  private chargerInscriptions(liste: Evenement[]): void {
+    for (const evenement of liste) {
+      this.evenementService.monInscription(evenement.id).subscribe((inscription) => {
+        this.inscriptions.set({ ...this.inscriptions(), [evenement.id]: inscription });
+      });
+    }
+  }
+
+  // On recharge la liste pour mettre à jour les jauges et les statuts.
+  private apresChangement(): void {
+    this.evenementEnCours.set(null);
+    this.charger();
+  }
+
+  private echec(erreur: unknown): void {
+    this.evenementEnCours.set(null);
+    this.erreur.set(messageErreur(erreur, "L'opération n'a pas pu aboutir."));
+  }
+}
