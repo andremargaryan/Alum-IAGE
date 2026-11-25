@@ -1,0 +1,52 @@
+info:
+  name: 00 - Créer le compte de test des notifications
+  type: http
+  seq: 0
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users"
+  headers:
+    - name: Accept
+      value: application/json
+    - name: Content-Type
+      value: application/json
+  auth: inherit
+  body:
+    type: json
+    data: |-
+      {
+        "prenom": "Bruno",
+        "nom": "Notifications",
+        "email": "{{notificationsEmail}}",
+        "motDePasse": "NotificationsEssai!"
+      }
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        bru.setVar("notificationsUserId", "");
+        bru.setVar("notificationBienvenueId", "");
+        bru.setVar("jetonNotifications", "");
+        const suffixe = Date.now() + "-" + Math.random().toString(36).slice(2);
+        bru.setVar("notificationsEmail", "notifications." + suffixe + "@example.test");
+    - type: after-response
+      code: |-
+        if (res.getStatus() === 201) {
+            bru.setVar("notificationsUserId", String(res.getBody().id));
+        }
+    - type: tests
+      code: |-
+        test("Statut HTTP 201", function () {
+            expect(res.getStatus()).to.equal(201);
+        });
+
+        test("Compte actif créé avec le rôle ETUDIANT", function () {
+            const compte = res.getBody();
+            expect(compte.email).to.equal(bru.getVar("notificationsEmail"));
+            expect(compte.statut).to.equal("ACTIF");
+            expect(compte.role).to.equal("ETUDIANT");
+            expect(compte).to.not.have.property("motDePasse");
+            expect(res.getHeader("location")).to.equal("/users/" + compte.id);
+        });

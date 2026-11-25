@@ -1,0 +1,12 @@
+info:
+  name: Sprint 3 - ALUMNI-14 Notifications
+  type: folder
+  seq: 5
+
+request:
+  auth: inherit
+
+docs: |-
+  Lance le dossier dans l’ordre avec le backend Docker sur localhost:8080.
+  Chaque exécution crée un compte de test unique, attend sa notification de
+  bienvenue JMS, vérifie sa lecture, puis supprime le compte via l’API.

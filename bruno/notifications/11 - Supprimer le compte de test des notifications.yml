@@ -1,0 +1,27 @@
+info:
+  name: 11 - Supprimer le compte de test des notifications
+  type: http
+  seq: 11
+
+http:
+  method: DELETE
+  url: "{{baseUrl}}/users/{{notificationsUserId}}"
+  headers:
+    - name: Authorization
+      value: "Bearer {{jetonNotifications}}"
+    - name: Accept
+      value: application/json
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        if (!bru.getVar("notificationsUserId")) {
+            throw new Error("Lance d’abord la requête 00 pour créer le compte de test des notifications.");
+        }
+    - type: tests
+      code: |-
+        test("Statut HTTP 204", function () {
+            expect(res.getStatus()).to.equal(204);
+        });

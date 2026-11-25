@@ -1,0 +1,19 @@
+info:
+  name: 13 - Supprimer son commentaire événement
+  type: http
+  seq: 13
+http:
+  method: DELETE
+  url: "{{baseUrl}}/api/posts/comments/{{commentEvent}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(204);
+        });

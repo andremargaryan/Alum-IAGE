@@ -1,0 +1,23 @@
+info:
+  name: 08 - Refuser un post inconnu
+  type: http
+  seq: 8
+http:
+  method: POST
+  url: "{{baseUrl}}/api/posts/2147483647/comments"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+  body:
+    type: json
+    data: |-
+      {"texte": "Test ALUMNI-13"}
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(404);
+        });

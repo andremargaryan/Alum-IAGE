@@ -1,0 +1,19 @@
+info:
+  name: 11 - Supprimer son commentaire forum
+  type: http
+  seq: 11
+http:
+  method: DELETE
+  url: "{{baseUrl}}/api/posts/comments/{{commentForum}}"
+  headers:
+    - name: Content-Type
+      value: application/json
+    - name: Authorization
+      value: "Bearer {{jetonHugo}}"
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("Réponse et contenu", function () {
+          expect(res.getStatus()).to.equal(204);
+        });
