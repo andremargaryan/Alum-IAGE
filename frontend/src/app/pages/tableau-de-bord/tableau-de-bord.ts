@@ -1,6 +1,6 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { CarteEvenement } from '../../composants/carte-evenement/carte-evenement';
 import { CarteFrance, VilleMembres } from '../../composants/carte-france/carte-france';
 import { Evenement, MonInscription } from '../../modeles/evenement';
@@ -17,9 +17,10 @@ import { UtilisateurService } from '../../services/utilisateur.service';
   templateUrl: './tableau-de-bord.html',
   styleUrl: './tableau-de-bord.scss',
 })
-export class TableauDeBord implements OnInit {
+export class TableauDeBord implements OnInit, OnDestroy {
   private utilisateurService = inject(UtilisateurService);
   private evenementService = inject(EvenementService);
+  private requetesEvenements = new Subscription();
   private forumService = inject(ForumService);
   session = inject(SessionService);
 
@@ -54,20 +55,26 @@ export class TableauDeBord implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.requetesEvenements.unsubscribe();
+  }
+
   // GET /api/events : les 3 prochains, avec l'inscription de l'utilisateur pour chacun.
   chargerEvenements(): void {
-    this.evenementService.lister().subscribe((liste) => {
+    this.requetesEvenements.unsubscribe();
+    this.requetesEvenements = new Subscription();
+    this.requetesEvenements.add(this.evenementService.lister().subscribe((liste) => {
       const prochains = liste.slice(0, 3);
       this.inscriptions.set({});
       this.evenements.set(prochains);
       this.chargement.set(false);
       for (const evenement of prochains) {
-        this.evenementService.monInscription(evenement.id).subscribe({
+        this.requetesEvenements.add(this.evenementService.monInscription(evenement.id).subscribe({
           next: (inscription) => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: inscription })),
           error: () => this.inscriptions.update((statuts) => ({ ...statuts, [evenement.id]: null })),
-        });
+        }));
       }
-    });
+    }));
   }
 
   // GET /api/posts : les 3 derniers sujets, puis le nombre de commentaires de chacun.
