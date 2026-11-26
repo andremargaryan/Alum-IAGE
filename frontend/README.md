@@ -4,13 +4,16 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 
 ## Development server
 
-To start a local development server, run:
+To start the API, create a `.env` at the root of the fork using `.env.example` and fill in `JWT_SECRET`. From the root, run `docker compose up -d --build backend`.
+
+From the `frontend` directory, install the dependencies and start Angular.
 
 ```bash
-ng serve
+npm ci
+npm start
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open `http://localhost:4201/`. Angular reloads when source files change. It forwards requests to `/api/...` and `/users` to the local API on port `8082`.
 
 ## Code scaffolding
 

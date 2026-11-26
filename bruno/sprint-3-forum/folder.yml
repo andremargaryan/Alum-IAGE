@@ -7,7 +7,7 @@ request:
   auth: inherit
 
 docs: |-
-  Lance le dossier dans l’ordre avec le backend Docker démarré sur localhost:8080.
+  Lance le dossier dans l’ordre avec le backend Docker démarré sur localhost:8082.
   Utilise Hugo (ETUDIANT, mot de passe "password") des données de départ.
   Dans les données de départ, le sujet 3 a 2 likes dont celui de Hugo.
   Les requêtes 10 et 11 retirent puis remettent ce like : la base revient à son état de départ.

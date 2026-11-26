@@ -1,0 +1,24 @@
+<app-en-tete />
+
+<main class="accueil">
+  <!-- Fond flou : trois taches de couleur floutées qui bougent lentement -->
+  <div class="fond" aria-hidden="true">
+    <span class="tache tache-1"></span>
+    <span class="tache tache-2"></span>
+    <span class="tache tache-3"></span>
+  </div>
+
+  <section class="centre">
+    <h1 class="titre">
+      <app-logo-sillage />
+    </h1>
+    <p class="slogan">le réseau des miagistes.</p>
+
+    <div class="appel">
+      <a class="bouton bouton-plein bouton-grand" routerLink="/connexion">Se connecter</a>
+      <p class="appel-secondaire">
+        Pas encore de compte ? <a routerLink="/inscription">S'inscrire</a>
+      </p>
+    </div>
+  </section>
+</main>

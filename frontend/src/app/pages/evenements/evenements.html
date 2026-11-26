@@ -1,0 +1,43 @@
+<div class="carte barre-outils">
+  <div class="puces">
+    <button class="puce" type="button" [class.active]="categorieChoisie() === null" (click)="choisirCategorie(null)">Tous</button>
+    @for (categorie of categories; track categorie.id) {
+      <button class="puce" type="button" [class.active]="categorieChoisie() === categorie.id" (click)="choisirCategorie(categorie.id)">
+        {{ categorie.libelle }}
+      </button>
+    }
+  </div>
+
+  <form class="recherche" (ngSubmit)="charger()">
+    <input class="champ-recherche" type="search" name="recherche" [(ngModel)]="recherche" placeholder="Rechercher un événement…" />
+  </form>
+
+  @if (session.peutCreerEvenement()) {
+    <a class="bouton bouton-plein" routerLink="/evenements/nouveau">+ Créer un événement</a>
+  }
+</div>
+
+@if (erreur()) {
+  <p class="message-erreur">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="etat-vide">Chargement des événements…</p>
+} @else if (evenementsAffiches().length === 0) {
+  <div class="carte etat-vide-carte">
+    <p>Aucun événement à venir ne correspond.</p>
+  </div>
+} @else {
+  <div class="grille-cartes">
+    @for (evenement of evenementsAffiches(); track evenement.id) {
+      <app-carte-evenement
+        [evenement]="evenement"
+        [inscription]="inscriptions()[evenement.id]"
+        [estMonEvenement]="estMonEvenement(evenement)"
+        [enCours]="evenementEnCours() === evenement.id"
+        (inscrire)="inscrire($event)"
+        (desinscrire)="desinscrire($event)"
+      />
+    }
+  </div>
+}

@@ -1,12 +1,19 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Chargement } from './composants/chargement/chargement';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.scss',
+  imports: [RouterOutlet, Chargement],
   templateUrl: './app.html',
+  styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('frontend');
+  // L'écran de chargement s'affiche à chaque ouverture du site.
+  chargementTermine = signal(false);
+
+  // Appelée quand le composant Chargement émet son événement "termine".
+  finDuChargement(): void {
+    this.chargementTermine.set(true);
+  }
 }

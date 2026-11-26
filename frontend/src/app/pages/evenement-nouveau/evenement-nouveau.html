@@ -1,0 +1,75 @@
+<a class="bouton bouton-discret retour" routerLink="/evenements">← Retour aux événements</a>
+
+<form class="carte formulaire-page" [formGroup]="formulaire" (ngSubmit)="creer()">
+  <h2>Nouvel événement</h2>
+
+  <label class="champ">
+    <span>Titre</span>
+    <input type="text" formControlName="titre" placeholder="Afterwork de fin d'année" />
+    @if (champInvalide('titre')) {
+      <small class="erreur-champ">Le titre est obligatoire (200 caractères max).</small>
+    }
+  </label>
+
+  <label class="champ">
+    <span>Description</span>
+    <textarea formControlName="description" rows="4" placeholder="Programme, public visé, infos pratiques…"></textarea>
+    @if (champInvalide('description')) {
+      <small class="erreur-champ">La description est obligatoire.</small>
+    }
+  </label>
+
+  <div class="ligne-champs">
+    <label class="champ">
+      <span>Catégorie</span>
+      <select formControlName="categorieId">
+        @for (categorie of categories; track categorie.id) {
+          <option [value]="categorie.id">{{ categorie.libelle }}</option>
+        }
+      </select>
+    </label>
+    <label class="champ">
+      <span>Date et heure</span>
+      <input type="datetime-local" formControlName="dateEvenement" />
+      @if (champInvalide('dateEvenement')) {
+        <small class="erreur-champ">Choisis une date à venir.</small>
+      }
+    </label>
+  </div>
+
+  <div class="ligne-champs">
+    <label class="champ">
+      <span>Lieu</span>
+      <input type="text" formControlName="lieu" placeholder="Centre PMF, amphi N" />
+      @if (champInvalide('lieu')) {
+        <small class="erreur-champ">Le lieu est obligatoire.</small>
+      }
+    </label>
+    <label class="champ">
+      <span>Capacité <em>(vide = illimitée)</em></span>
+      <input type="number" min="1" formControlName="capaciteMax" placeholder="50" />
+      @if (champInvalide('capaciteMax')) {
+        <small class="erreur-champ">Au moins 1 place.</small>
+      }
+    </label>
+  </div>
+
+  <label class="champ">
+    <span>Adresse</span>
+    <input type="text" formControlName="adresse" placeholder="90 rue de Tolbiac, 75013 Paris" />
+    @if (champInvalide('adresse')) {
+      <small class="erreur-champ">L'adresse est obligatoire.</small>
+    }
+  </label>
+
+  @if (erreur()) {
+    <p class="message-erreur">{{ erreur() }}</p>
+  }
+
+  <div class="actions-formulaire">
+    <a class="bouton bouton-discret" routerLink="/evenements">Annuler</a>
+    <button class="bouton bouton-plein" type="submit" [disabled]="envoiEnCours()">
+      {{ envoiEnCours() ? 'Création…' : "Créer l'événement" }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,71 @@
+<article class="carte carte-evenement" [class.compact]="compact">
+  @if (!compact) {
+    <div class="bandeau bandeau-{{ teinte }}">
+      <span class="badge teinte-{{ teinte }}">{{ evenement.categorieLibelle }}</span>
+      @if (estMonEvenement) {
+        <span class="badge teinte-encre">Mon événement</span>
+      }
+    </div>
+  }
+
+  <div class="corps">
+    <h3 class="titre">{{ evenement.titre }}</h3>
+    <p class="info">
+      <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /></svg>
+      {{ evenement.dateEvenement | date: "EEE d MMM y '·' HH'h'mm" }}
+    </p>
+    <p class="info">
+      <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" /><circle cx="12" cy="9.5" r="2.5" /></svg>
+      {{ evenement.lieu }}
+    </p>
+
+    @if (!compact) {
+      @if (evenement.capaciteMax !== null) {
+        <div class="jauge">
+          <div class="jauge-texte" [class.complet]="evenement.complet">
+            @if (evenement.complet) {
+              Complet · {{ evenement.nombreInscrits }} / {{ evenement.capaciteMax }}
+            } @else {
+              Places réservées · {{ evenement.nombreInscrits }} / {{ evenement.capaciteMax }}
+            }
+          </div>
+          <div class="barre-progression">
+            <span class="remplissage remplissage-{{ evenement.complet ? 'rouge' : teinte }}" [style.width.%]="evenement.tauxRemplissage"></span>
+          </div>
+        </div>
+      } @else {
+        <p class="jauge-texte">{{ evenement.nombreInscrits }} inscrit(s) · places illimitées</p>
+      }
+    }
+
+    <div class="actions">
+      @if (inscription === undefined) {
+        <span class="etat">Chargement de ton inscription…</span>
+      } @else if (inscription === null) {
+        <span class="etat">Statut d'inscription indisponible.</span>
+      } @else if (statut === 'INSCRIT') {
+        <span class="etat etat-vert">Inscrit ✓</span>
+        <button class="lien-texte lien-danger" type="button" [disabled]="enCours" (click)="desinscrire.emit(evenement.id)">
+          Se désinscrire
+        </button>
+      } @else if (statut === 'EN_ATTENTE') {
+        <span class="etat etat-ambre">En attente · position {{ inscription?.rang }}</span>
+        <button class="lien-texte lien-danger" type="button" [disabled]="enCours" (click)="desinscrire.emit(evenement.id)">
+          Quitter la file
+        </button>
+      } @else if (evenement.complet) {
+        <button class="bouton bouton-ambre" type="button" [disabled]="enCours" (click)="inscrire.emit(evenement.id)">
+          Rejoindre la liste d'attente
+        </button>
+      } @else {
+        <button class="bouton bouton-plein" type="button" [disabled]="enCours" (click)="inscrire.emit(evenement.id)">
+          S'inscrire
+        </button>
+      }
+
+      @if (compact && inscription && evenement.capaciteMax !== null && !participe) {
+        <span class="capacite">{{ evenement.nombreInscrits }} / {{ evenement.capaciteMax }}</span>
+      }
+    </div>
+  </div>
+</article>

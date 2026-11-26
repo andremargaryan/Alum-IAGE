@@ -1,0 +1,39 @@
+<app-en-tete />
+
+<main class="page-auth">
+  <div class="fond" aria-hidden="true">
+    <span class="tache tache-1"></span>
+    <span class="tache tache-2"></span>
+  </div>
+
+  <form class="carte carte-auth" [formGroup]="formulaire" (ngSubmit)="seConnecter()">
+    <h1>Se connecter</h1>
+    <p class="sous-titre">Content de te revoir sur Sillage.</p>
+
+    <label class="champ">
+      <span>Email</span>
+      <input type="email" formControlName="email" placeholder="prenom@exemple.fr" autocomplete="email" />
+      @if (champInvalide('email')) {
+        <small class="erreur-champ">Saisis une adresse email valide.</small>
+      }
+    </label>
+
+    <label class="champ">
+      <span>Mot de passe</span>
+      <input type="password" formControlName="motDePasse" autocomplete="current-password" />
+      @if (champInvalide('motDePasse')) {
+        <small class="erreur-champ">Le mot de passe est obligatoire.</small>
+      }
+    </label>
+
+    @if (erreur()) {
+      <p class="message-erreur">{{ erreur() }}</p>
+    }
+
+    <button class="bouton bouton-plein bouton-large" type="submit" [disabled]="envoiEnCours()">
+      {{ envoiEnCours() ? 'Connexion…' : 'Se connecter' }}
+    </button>
+
+    <p class="bas-carte">Pas encore de compte ? <a routerLink="/inscription">S'inscrire</a></p>
+  </form>
+</main>

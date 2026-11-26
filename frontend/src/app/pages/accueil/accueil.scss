@@ -1,0 +1,67 @@
+.accueil {
+  position: relative;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 120px 24px 64px;
+}
+
+// --- Contenu central --------------------------------------------------------
+.centre {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: apparait 0.8s ease both;
+}
+
+.titre {
+  margin: 0;
+  width: min(80vw, 560px);
+}
+
+.slogan {
+  margin: 28px 0 0;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: var(--texte-doux);
+  letter-spacing: 0.02em;
+}
+
+.appel {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.appel-secondaire {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+
+  a {
+    color: var(--encre);
+    font-weight: 600;
+  }
+}
+
+@keyframes apparait {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .centre {
+    animation: none;
+  }
+}
