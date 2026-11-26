@@ -1,10 +1,9 @@
-name: sillage-alumni
-
 services:
   backend:
     build: ./backend
+    container_name: alum_iage_backend
     ports:
-      - "127.0.0.1:8082:8080"
+      - "8080:8080"
     environment:
       # Dans le réseau Docker, la base s'appelle "mysql" (pas localhost)
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/alumni?serverTimezone=Europe/Paris&allowPublicKeyRetrieval=true&useSSL=false
@@ -25,8 +24,9 @@ services:
 
   frontend:
     build: ./frontend
+    container_name: alum_iage_frontend
     ports:
-      - "127.0.0.1:4202:80"
+      - "4200:80"
     depends_on:
       - backend
     networks:
@@ -34,6 +34,7 @@ services:
 
   mysql:
     image: mysql:8.4
+    container_name: alum_iage_mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_alumni}
@@ -43,7 +44,7 @@ services:
       TZ: Europe/Paris
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --log-bin-trust-function-creators=1   # triggers créables depuis phpMyAdmin
     ports:
-      - "127.0.0.1:3307:3306"
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d:ro   # scripts .sql exécutés au 1er démarrage (volume vide)
@@ -59,13 +60,14 @@ services:
 
   phpmyadmin:
     image: phpmyadmin:latest
+    container_name: alum_iage_phpmyadmin
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
       UPLOAD_LIMIT: 64M
     ports:
-      - "127.0.0.1:8083:80"  # http://localhost:8083
+      - "8081:80"            # http://localhost:8081
     depends_on:
       mysql:
         condition: service_healthy
@@ -74,14 +76,15 @@ services:
 
   artemis:
     image: apache/activemq-artemis:latest-alpine
+    container_name: alum_iage_artemis
     restart: unless-stopped
     environment:
       ARTEMIS_USER: ${ARTEMIS_USER:-artemis}
       ARTEMIS_PASSWORD: ${ARTEMIS_PASSWORD:-artemis}
       ANONYMOUS_LOGIN: "false"
     ports:
-      - "127.0.0.1:61617:61616" # broker JMS
-      - "127.0.0.1:8162:8161"   # console : http://localhost:8162
+      - "61616:61616"        # broker JMS
+      - "8161:8161"          # console : http://localhost:8161
     networks:
       - app-network
 
