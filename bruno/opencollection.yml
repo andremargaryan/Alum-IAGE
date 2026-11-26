@@ -17,7 +17,7 @@ config:
 request:
   variables:
     - name: baseUrl
-      value: http://localhost:8082
+      value: http://localhost:8080
     - name: idInconnu
       value: "2147483647"
 

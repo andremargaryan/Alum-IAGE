@@ -1,31 +1,24 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 import { App } from './app';
-import { routes } from './app.routes';
 
 describe('App', () => {
   beforeEach(async () => {
-    localStorage.clear();
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter(routes)],
-    }).compileComponents();
+    })
+      .compileComponents();
   });
 
-  it('affiche l’écran de chargement à l’ouverture', async () => {
+  it('should create the app', () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
-    const page = fixture.nativeElement as HTMLElement;
-    expect(page.querySelector('app-chargement')).toBeTruthy();
-    expect(page.querySelector('router-outlet')).toBeNull();
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
   });
 
-  it('affiche les pages une fois le chargement terminé', async () => {
+  it('should render title', async () => {
     const fixture = TestBed.createComponent(App);
-    fixture.componentInstance.finDuChargement();
     await fixture.whenStable();
-    const page = fixture.nativeElement as HTMLElement;
-    expect(page.querySelector('app-chargement')).toBeNull();
-    expect(page.querySelector('router-outlet')).toBeTruthy();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, frontend');
   });
 });

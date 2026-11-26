@@ -7,7 +7,7 @@ request:
   auth: inherit
 
 docs: |-
-  Lance le dossier dans l’ordre avec le backend Docker démarré sur localhost:8082.
+  Lance le dossier dans l’ordre avec le backend Docker démarré sur localhost:8080.
   Le scénario crée un compte de test, puis effectue sa suppression logique.
   La formation utilise Paris 1 et IBI, présents dans les données de départ.
 
